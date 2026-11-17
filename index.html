@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <meta name="theme-color" content="#0a0e13"/>
+  <title>KiO</title>
+  <style>body{margin:0;background:#0a0e13;color:#f3f4f6;font-family:system-ui;display:flex;align-items:center;justify-content:center;min-height:100vh}</style>
+</head>
+<body>
+  <p id="s">Caricamento KiO…</p>
+<script>
+(async function () {
+  try {
+    var n = 6;
+    var parts = [];
+    for (var i = 0; i < n; i++) {
+      var t = await fetch("./app.b64." + i).then(function (r) { return r.text(); });
+      parts.push(t.trim());
+    }
+    var b64 = parts.join("");
+    var bin = atob(b64);
+    var bytes = new Uint8Array(bin.length);
+    for (var j = 0; j < bin.length; j++) bytes[j] = bin.charCodeAt(j);
+    var html = new TextDecoder("utf-8").decode(bytes);
+    document.open();
+    document.write(html);
+    document.close();
+  } catch (e) {
+    document.getElementById("s").textContent = "Errore: " + e;
+  }
+})();
+</script>
+</body>
+</html>
